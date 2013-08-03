@@ -1,4 +1,4 @@
 tank_war
-========
+=======
 
-none
+1. init, pull, push
