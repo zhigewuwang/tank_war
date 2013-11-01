@@ -2,6 +2,7 @@
 #include "zgl.h"
 
 int size = 0;
+GLuint bufId = 0;
 
 void keydown(struct Window *window) {
 	if (window->key_status[VK_ESCAPE]) {
@@ -17,15 +18,6 @@ void keydown(struct Window *window) {
 void keyup(struct Window *window) {
 }
 void init(struct Window *window) {
-	/*
-	window->left = window->top = 100;
-	window->width = 800;
-	window->height = 600;
-	window->check_multisample = 0;
-	*/
-	//window->window_mode = WINDOW_MODE_PSEUDO_FULL_SCREEN;
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &size);
-	printf("max texture size : %d\n", size);
 }
 int prolog(struct Window *window) {
 	const GLubyte* version = glGetString(GL_VERSION); //返回负责当前OpenGL实现厂商的名字
@@ -36,6 +28,17 @@ int prolog(struct Window *window) {
 	glEnable(GL_ALPHA_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	printf("prolog\n");
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &size);
+	printf("max texture size : %d\n", size);
+
+	GLenum err = glewInit();
+	if (GLEW_OK != err)  {  
+		printf("Error: %s\n", glewGetErrorString(err));  
+	}  
+	
+	printf("glIsBuffer \n");
+	glGenBuffers(1, &bufId);
+	printf("glIsBuffer end \n");
 	return 0;
 }
 void resize(struct Window *window) {
@@ -46,8 +49,10 @@ void resize(struct Window *window) {
 	glViewport(0, 0, window->width, window->height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	//glOrtho(-halfWidth, halfWidth, -halfHeight, halfHeight, 0, -50);
-	gluPerspective(45.0, (float)window->width / window->height, 0, 850);
+	// left, right, bottom, top, near, far
+	glOrtho(0.0f, (float)window->width, 0.0f, (float)window->height, 0, 100);
+	//glOrtho(-halfWidth, halfWidth, -halfHeight, halfHeight, 0, 100);
+	//gluPerspective(45.0, (float)window->width / window->height, 0, 850);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -57,18 +62,5 @@ void epilog(struct Window *window) {
 void render(struct Window *window) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glLoadIdentity();
-	//glRotatef(20.0f, 0.0, 0.0, 1.0);
-	glBegin(GL_TRIANGLES);
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(-100.0, -100.0, -800);
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(0.0, 100.0, -800);
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(100.0, -100.0, -800);
-	glEnd();
-	glColor3f(0.0, .0, .0);
-	glEnable(GL_TEXTURE_2D);
-
-	glDisable(GL_TEXTURE_2D);
 	glFlush();
 }

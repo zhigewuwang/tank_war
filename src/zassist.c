@@ -48,3 +48,12 @@ int confirm(wchar_t *title, wchar_t *format, ...) {
 	va_end(args);
 	return select == IDNO ? 1 : 0;
 }
+
+void showCursor(int visiable){
+	if (visiable) 
+		 while (ShowCursor(1) < 0)
+			 ShowCursor(1);
+	else 
+		 while (ShowCursor(0) >= 0)
+			 ShowCursor(0);
+}

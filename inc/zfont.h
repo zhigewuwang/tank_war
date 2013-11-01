@@ -8,7 +8,7 @@
 
 struct Font {
 	void (*drawText)(struct Font *font, wchar_t *text, int x, int y);	
-} Font;
+};
 
 int cFont(char *fontPath, int size, struct Font **font);
 void dFont(struct Font *font);

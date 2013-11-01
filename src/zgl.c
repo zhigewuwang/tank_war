@@ -151,7 +151,7 @@ static void locate_size(struct Window *window, RECT *rect, DWORD *exStyle, DWORD
 		if (!change_screen_resolution(window)) {
 			window->window_mode = WINDOW_MODE_WINDOW;
 		} else {
-			ShowCursor(0);
+			showCursor(0);
 			rect->left = 0;
 			rect->top = 0;
 			rect->right = GetSystemMetrics(SM_CXSCREEN);
@@ -167,11 +167,12 @@ static void locate_size(struct Window *window, RECT *rect, DWORD *exStyle, DWORD
 		window->top = rect->top = 0;
 		window->width = rect->right = GetSystemMetrics(SM_CXSCREEN);
 		window->height = rect->bottom = GetSystemMetrics(SM_CYSCREEN);
-		ShowCursor(0);
+		showCursor(0);
 	}
 	if (window->window_mode == WINDOW_MODE_WINDOW) {
 		*exStyle = WS_EX_APPWINDOW;
 		*style = WS_OVERLAPPEDWINDOW;
+		showCursor(1);
 		AdjustWindowRectEx(rect, *style, 0, *exStyle);
 	}
 }
@@ -236,7 +237,7 @@ static void destroy_glwindow(struct Window *window) {
 	if (window->window_mode == WINDOW_MODE_FULL_SCREEN) {
 		printf("full screen change display setting\n");
 		ChangeDisplaySettings(0, 0);
-		ShowCursor(1);
+		showCursor(1);
 	}
 
 	UnregisterClass(window->class_name, window->hinstance);
